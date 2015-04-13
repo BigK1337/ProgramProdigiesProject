@@ -22,9 +22,11 @@
 
 using namespace std;
 
-ifstream File;
+ifstream File, Vendor,Customer; //Three file initializations.
 
-string itemtotal;
+string itemtotal; //Total number of items in Catalogue string form.
+
+int total=0; //Total number of items in catalogue, converted to int.
 
 struct small
 
@@ -68,7 +70,7 @@ struct list //Information about each item.
 
 };
 
-
+list *head;  //Catalogue of items
 
 struct warehouse  //Contains the slots for each size of item.
 
@@ -82,13 +84,37 @@ struct warehouse  //Contains the slots for each size of item.
 
 };
 
+bool check(string item,list *p,int num)  
+
+{
+
+    for(int i=0;i<total;i++)  //Compares item id to every node.
+
+    {
+
+        if(p->itemid==item)
+
+        {
+
+            return true; //If found, return true.
+
+        }
+
+        p=p->next;
+
+    }
+
+    return false; //Otherwise, return false.
+
+}
+
 void setuplist(list *p)  //Intakes the catalogue and stores it locally in the program.
 
 {
 
     string temp;
 
-    //getline(File,temp);
+    //getline(File,temp); //For the first line, 'List last created on: '
 
     while (!File.eof())
 
@@ -96,7 +122,7 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 
         getline(File,temp);
 
-        if(temp.size()<10)
+        if(temp.size()<10) //For last line of catalogue - T#items
 
         {
 
@@ -122,7 +148,7 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 
         }
 
-        else
+        else  //For every other line in the catalogue, sets up a node for each in a linked list.
 
         {
 
@@ -146,11 +172,165 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 
     }
 
+    total= atoi(itemtotal.c_str()); //Converts the total number from string to int.
+
 }
 
-void vendor(warehouse num[])
+void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 
 {
+
+    string input, today, fileid, item, number,count,shipped,comp,sentnum,numven,lineitems,itemsize;
+
+    getline(Vendor,input);  //First line with File ID and date receieved.
+
+    fileid=input.substr(1,4);
+
+    today=input.substr(6,8);cout<<"File #"<<fileid<<"  Shipment recieved on: "<<today.substr(0,2)<<"-"<<today.substr(2,2)<<"-"<<today.substr(4,4)<<endl<<endl;
+
+    while(!Vendor.eof())  //Ticks once for every vendor.
+
+    {
+
+        getline(Vendor,input);  //Gets vendor info and amount of items.
+
+        if(input.size()>7)  //If not last line of file, continue.
+
+        {
+
+            comp=input.substr(0,50);shipped=input.substr(50,10);sentnum=input.substr(60,1);
+
+            cout<<"Shipment from: "<<comp<<endl<<"Sent on: "<<shipped<<endl<<"Number of items: "<<sentnum<<endl;
+
+                int i = atoi(sentnum.c_str());  //Gets number of items from vendor in int form.
+
+            for(int j=i;j>0;j--)
+
+            {
+
+                getline(Vendor,input);
+
+                item=input.substr(0,10);number=input.substr(11,1);
+
+                if(input.size()==14){count=input.substr(13,1);}
+
+                else if(input.size()==15){count=input.substr(13,2);}
+
+                else if(input.size()==16){count=input.substr(13,3);}
+
+                else if(input.size()==17){count=input.substr(13,4);}
+
+                int n = (atoi(number.c_str())-1);
+
+                if(check(item,head,total)!=true)
+
+                {
+
+                    cout<<"Item "<<item<< " is not in the catalogue, will not store item."<<endl;
+
+                }
+
+                else
+
+                {
+
+                    list *temp;temp=head;
+
+                    for(int i=0;i<total;i++)
+
+                    {
+
+                        if(temp->itemid==item)
+
+                        {
+
+                            itemsize=temp->itemsize; //Grabs Item Size from catalogue.
+
+                            break;
+
+                        }
+
+                        temp=temp->next;
+
+                    }
+
+                    if(itemsize=="A")  //If item size is large.
+
+                    {
+
+                    
+
+                    }
+
+                    else if(itemsize=="B") //If item size is medium.
+
+                    {
+
+                        for(int i=0;i<60;i++)
+
+                        {
+
+                            if(num[n].medloc[i].medium[0]=="" || num[n].medloc[i].medium[0]==item)
+
+                            {
+
+                                if(num[n].medloc[i].medium[0]==item)
+
+                                {
+
+                                    for(int j=0;j<100;j++)
+
+                                    {
+
+                                    //Not finished.
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    else if(itemsize=="C") //If item size is small.
+
+                    {
+
+                    
+
+                    }
+
+                }
+
+                
+
+            }
+
+            }
+
+            else
+
+            {
+
+                lineitems=input.substr(3,1);numven=input.substr(1,1);
+
+                cout<<"Total number of vendors: "<<numven<<endl<<"Total number of line items: "<<lineitems<<endl;
+
+            }
+
+    }
+
+}
+
+void customer(warehouse num[3])
+
+{
+
+    string input,type,last,first,business,straddr,city,state,post,country,orderdate,ordercount,custid,orderid,payment,discount,fileid,shipdate,item,number,count,customers,lineitems;
+
+    getline(Customer,input);
 
     
 
@@ -160,23 +340,17 @@ int main()
 
 {
 
-    File.open("input.txt"); 
+    File.open("catalogue.txt"), Vendor.open("vendor.txt"), Customer.open("Customer.txt");
 
     warehouse num[3];  //Three warehouse locations
 
     string input,temp;
 
-    list *head;  //Catalogue of items
-
     head= new list;
 
-    /*setuplist(head);
+    setuplist(head);
 
-    cout<<head->itemid<<endl<<head->itemname<<endl<<head->itemsize<<endl<<head->itemprice<<endl<<head->itemdescription<<endl;
-
-    cout<<head->next->itemid<<endl<<head->next->itemname<<endl<<head->next->itemsize<<endl<<head->next->itemprice<<endl<<head->next->itemdescription<<endl<<itemtotal;*/
-
-    vendor(num);
+    //vendor(num);
 
     /*cout<<"What would you like to do?"<<endl<<"1. Intake initial stock."<<endl<<"2.Take vendor items in."<<endl;
 
@@ -238,7 +412,8 @@ int main()
 
     }*/
 
+    //system("pause"); //Coding in Xcode on mac, I don't need this.
+
     return 0;
 
 }
-
