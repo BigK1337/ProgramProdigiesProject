@@ -124,9 +124,11 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						}
 						temp = temp->next;
 					}
+					if (itemsize == "S")  //If item size is large
 					{
 
 					}
+					else if (itemsize == "M") //If item size is medium.
 					{
 						for (int i = 0; i<60; i++)
 						{
@@ -142,6 +144,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 						}
 					}
+					else if (itemsize == "L") //If item size is large.
 					{
 
 					}
