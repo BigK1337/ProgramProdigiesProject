@@ -90,11 +90,11 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize;
 	getline(Vendor, input);  //First line with File ID and date receieved.
 	fileid = input.substr(1, 4);
-	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 2) << "-" << today.substr(2, 2) << "-" << today.substr(4, 4) << endl << endl;
+	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 4) << "-" << today.substr(4, 2) << "-" << today.substr(6, 2) << endl << endl;
 	while (!Vendor.eof())  //Ticks once for every vendor.
 	{
 		getline(Vendor, input);  //Gets vendor info and amount of items.
-		if (input.size()>7)  //If not last line of file, continue.
+		if (input.size()>13)  //If not last line of file, continue.
 		{
 			comp = input.substr(0, 50); shipped = input.substr(50, 10); sentnum = input.substr(60, 1);
 			cout << "Shipment from: " << comp << endl << "Sent on: " << shipped << endl << "Number of items: " << sentnum << endl;
@@ -124,7 +124,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						}
 						temp = temp->next;
 					}
-					if (itemsize == "S")  //If item size is large
+					if (itemsize == "S")  //If item size is large.
 					{
 
 					}
@@ -138,7 +138,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								{
 									for (int j = 0; j<100; j++)
 									{
-										//Not finished.
+										
 									}
 								}
 							}
@@ -170,8 +170,7 @@ int main()
 	string input, temp;
 	head = new list;
 	setuplist(head);
-
-	//vendor(num);
+	vendor(num);
 	/*cout<<"What would you like to do?"<<endl<<"1. Intake initial stock."<<endl<<"2.Take vendor items in."<<endl;
 	cout<<"3.Receive customer order and ship."<<endl<<"4. Next Day."<<endl<<"5. Save and quit."<<endl;
 	cin>>input;
