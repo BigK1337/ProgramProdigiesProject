@@ -166,7 +166,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].medloc[z].medium[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
-							cout<<"We just stored "<<num[n].medloc[z].medium[1]<<" of the item with ID: "<<num[n].medloc[z].medium[0]<<endl;
+							cout<<"We just stored "<<num[n].medloc[z].medium[1]<<" of the Medium item with ID: "<<num[n].medloc[z].medium[0]<<endl;
 							system("pause");
 							}
 							if(numberAlreadyInWarehouse == 100 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
