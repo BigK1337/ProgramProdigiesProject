@@ -140,10 +140,90 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						y++;
 					}
 					sizeFound = false;//reset to false
+					bool itemAlreadyInWarehouse = false;//reset to false
 					if (itemsize == "S")  //If item size is small.
 					{
-
-					}
+					{
+						//The below chunk checks to see if the item already exists in the warehouse
+						int s = 0;
+						while(s<20 && doneStoring == false)//Look at all 20 small spots in the warehouse
+						{
+							if (num[n].sloc[s].small[0] == item && num[n]. sloc[s].small[0]!="250")//If item is in warehouse and the slot isnt full
+							{
+								itemAlreadyInWarehouse = true;//Item is in warehouse
+							}
+							if(itemAlreadyInWarehouse == true)
+							{
+								int numberAlreadyInWarehouse = (atoi(num[n]. sloc[s].small[1].c_str()));
+							while(numberFromForm>0 && numberAlreadyInWarehouse < 250)//While there are some to be added from the form and still room in the slot
+							{
+								numberFromForm--;//Remove one from number to be added to warehouse
+								numberAlreadyInWarehouse++;//Add one to number in warehouse
+							}
+							if(numberFromForm == 0)//If we added every item from the vendor form
+							{
+								doneStoring = true;//We have stored every item from the vendor form
+								num[n]. sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n]. sloc[i].small[1]
+							cout<<"We just stored "<<num[n]. sloc[s].small[1]<<" of the small item with ID: "<<num[n]. sloc[s].small[0]<<endl;
+							system("pause");
+							}
+							if(numberAlreadyInWarehouse == 250 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
+							{
+								s--;//Redo for loop for same item
+							}
+							else//item perfectly fills slot
+							{
+								
+							}
+							}
+							else//The below chunk runs if the item does not already exist in the warehouse.
+							{
+						//All below: Search for an empty slot. If none exist then check another warehouse.If all are full, tell analyst.					
+						for (int r = 0; r<20; r++)//Look at all 60 small spots in the warehouse
+						{
+						if(num[n]. sloc[r].small[0] == "")
+						{
+							num[n]. sloc[r].small[0] = item;//Put item ID in first empty slot
+							s--;//Restart loop for this item, there is now a place to add the items to.
+							break;
+						}
+						if(r==19)//checked whole warehouse, it is full
+						{
+							noRoom = true;
+						}
+						}
+						if(noRoom==true)
+						{
+							noRoom = false;
+							//Check another Warehouse
+							warehousesChecked[n] = true;//set the warehouse we just checked as checked
+							if(warehousesChecked[0]== false)//if we haven't checked warehouse 1, check it
+							{
+								n = 0;
+							}
+							else if(warehousesChecked[1]==false)//if we haven't checked warehouse 2, check it
+							{
+								n = 1;
+							}
+							else if(warehousesChecked[2]==false)//if we haven't checked warehouse 3, check it
+							{
+								n = 2;
+							}
+							else
+							{
+								//Tell analyst all warehouses are full
+								//Set all warehouses to unchecked
+								warehousesChecked[0]= false;
+								warehousesChecked[1]= false;
+								warehousesChecked[2]= false;
+							}
+							
+						}						
+							}
+							s++;
+						}		
+					}		
+					}					
 					else if (itemsize == "M") //If item size is medium.
 					{
 						//The below chunk checks to see if the item already exists in the warehouse
@@ -194,7 +274,6 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							noRoom = true;
 						}
 						}
-
 						if(noRoom==true)
 						{
 							noRoom = false;
@@ -221,15 +300,91 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								warehousesChecked[2]= false;
 							}
 							
-						}
-						
+						}						
 							}
 							z++;
 						}		
 					}
 					else if (itemsize == "L") //If item size is large.
 					{
-
+						//The below chunk checks to see if the item already exists in the warehouse
+						int l = 0;
+						while(l<20 && doneStoring == false)//Look at all 20 large spots in the warehouse
+						{
+							if (num[n].lloc[l].large[0] == item && num[n]. lloc[l].large[0]!="10")//If item is in warehouse and the slot isnt full
+							{
+								itemAlreadyInWarehouse = true;//Item is in warehouse
+							}
+							if(itemAlreadyInWarehouse == true)
+							{
+								int numberAlreadyInWarehouse = (atoi(num[n]. lloc[l].large[1].c_str()));
+							while(numberFromForm>0 && numberAlreadyInWarehouse < 10)//While there are some to be added from the form and still room in the slot
+							{
+								numberFromForm--;//Remove one from number to be added to warehouse
+								numberAlreadyInWarehouse++;//Add one to number in warehouse
+							}
+							if(numberFromForm == 0)//If we added every item from the vendor form
+							{
+								doneStoring = true;//We have stored every item from the vendor form
+								num[n]. lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n]. lloc[i].large[1]
+							cout<<"We just stored "<<num[n]. lloc[l].large[1]<<" of the Large item with ID: "<<num[n]. lloc[l].large[0]<<endl;
+							system("pause");
+							}
+							if(numberAlreadyInWarehouse == 10 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
+							{
+								l--;//Redo for loop for same item
+							}
+							else//item perfectly fills slot
+							{
+								
+							}
+							}
+							else//The below chunk runs if the item does not already exist in the warehouse.
+							{
+						//All below: Search for an empty slot. If none exist then check another warehouse.If all are full, tell analyst.					
+						for (int r = 0; r<20; r++)//Look at all 60 large spots in the warehouse
+						{
+						if(num[n]. lloc[r].large[0] == "")
+						{
+							num[n]. lloc[r].large[0] = item;//Put item ID in first empty slot
+							l--;//Restart loop for this item, there is now a place to add the items to.
+							break;
+						}
+						if(r==19)//checked whole warehouse, it is full
+						{
+							noRoom = true;
+						}
+						}
+						if(noRoom==true)
+						{
+							noRoom = false;
+							//Check another Warehouse
+							warehousesChecked[n] = true;//set the warehouse we just checked as checked
+							if(warehousesChecked[0]== false)//if we haven't checked warehouse 1, check it
+							{
+								n = 0;
+							}
+							else if(warehousesChecked[1]==false)//if we haven't checked warehouse 2, check it
+							{
+								n = 1;
+							}
+							else if(warehousesChecked[2]==false)//if we haven't checked warehouse 3, check it
+							{
+								n = 2;
+							}
+							else
+							{
+								//Tell analyst all warehouses are full
+								//Set all warehouses to unchecked
+								warehousesChecked[0]= false;
+								warehousesChecked[1]= false;
+								warehousesChecked[2]= false;
+							}
+							
+						}						
+							}
+							l++;
+						}		
 					}
 				}
 			}
