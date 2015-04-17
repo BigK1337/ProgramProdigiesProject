@@ -126,7 +126,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 				{
 					list *temp; temp = head;
 					int y = 0;
-					while(y<total && sizeFound == false)//replaced for loop so we could use the bool instead of the break
+					while(y<total && sizeFound == false)//Find's item's size from catalogue
 					{					
 						if (temp->itemid == item)
 						{
@@ -148,7 +148,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						int s = 0;
 						while(s<20 && doneStoring == false)//Look at all 20 small spots in the warehouse
 						{
-							if (num[n].sloc[s].small[0] == item && num[n]. sloc[s].small[0]!="250")//If item is in warehouse and the slot isnt full
+							if (num[n].sloc[s].small[0] == item && num[n]. sloc[s].small[1]!="250")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
 							}
@@ -230,7 +230,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						int z = 0;
 						while(z<60 && doneStoring == false)//Look at all 60 medium spots in the warehouse
 						{
-							if (num[n].medloc[z].medium[0] == item && num[n].medloc[z].medium[0]!="100")//If item is in warehouse and the slot isnt full
+							if (num[n].medloc[z].medium[0] == item && num[n].medloc[z].medium[1]!="100")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
 							}
@@ -311,7 +311,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						int l = 0;
 						while(l<20 && doneStoring == false)//Look at all 20 large spots in the warehouse
 						{
-							if (num[n].lloc[l].large[0] == item && num[n]. lloc[l].large[0]!="10")//If item is in warehouse and the slot isnt full
+							if (num[n].lloc[l].large[0] == item && num[n]. lloc[l].large[1]!="10")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
 							}
