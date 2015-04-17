@@ -124,7 +124,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						}
 						temp = temp->next;
 					}
-					if (itemsize == "S")  //If item size is large.
+					if (itemsize == "S")  //If item size is small.
 					{
 
 					}
@@ -160,8 +160,76 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 }
 void customer(warehouse num[3])
 {
-	string input, type, last, first, business, straddr, city, state, post, country, orderdate, ordercount, custid, orderid, payment, discount, fileid, shipdate, item, number, count, customers, lineitems;
+	string input, type, last, first, business, straddr, city, state, post, country, orderdate, ordercount, custid, orderid, payment, discount, fileid, shipdate, item, number, count, customers, lineitems, itemsize;
+	//what is the business variable for???????
 	getline(Customer, input);
+	fileid = input.substr(1, 4);
+	shipdate = input.substr(6, 8); cout << "File #" << fileid << "  Shipping Date: " << shipdate.substr(0, 4) << "-" << shipdate.substr(4, 2) << "-" << shipdate.substr(6, 2) << endl << endl;
+	while (!Customer.eof()) 
+	{
+		getline(Customer, input);//Type,Last,First
+		if (input.size()>13)  //If not last line of file, continue.
+		{
+			//All of Customer's Info
+			type = input.substr(0, 1); last = input.substr(1, 30); first = input.substr(30, 30);straddr = input.substr(60, 30);city = input.substr(90, 20);
+			state = input.substr(110, 20);post = input.substr(130, 10);country = input.substr(140, 40);orderdate = input.substr(180, 8);ordercount = input.substr(188, 1);
+			custid = input.substr(189, 10);orderid = input.substr(199, 10);payment = input.substr(209, 10);discount = input.substr(219, 3);
+		
+		int i = atoi(ordercount.c_str());  //Gets number of items from vendor in int form.
+			for (int j = i; j>0; j--)
+			{
+				getline(Vendor, input);
+				item = input.substr(0, 10); number = input.substr(11, 1);
+				if (input.size() == 14){ count = input.substr(13, 1); }
+				else if (input.size() == 15){ count = input.substr(13, 2); }
+				else if (input.size() == 16){ count = input.substr(13, 3); }
+				else if (input.size() == 17){ count = input.substr(13, 4); }
+				int n = (atoi(number.c_str()) - 1);
+			
+		if (check(item, head, total) != true)
+				{
+					cout << "Item " << item << " is not in the catalogue, will not store item." << endl;
+				}
+				else
+				{
+					list *temp; temp = head;
+					for (int i = 0; i<total; i++)
+					{
+						if (temp->itemid == item)
+						{
+							itemsize = temp->itemsize; //Grabs Item Size from catalogue.
+							break;
+						}
+						temp = temp->next;
+					}
+					if (itemsize == "S")  //If item size is small.
+					{
+
+					}
+					else if (itemsize == "M") //If item size is medium.
+					{
+						for (int i = 0; i<60; i++)
+						{
+							if (num[n].medloc[i].medium[0] == "" || num[n].medloc[i].medium[0] == item)
+							{
+								if (num[n].medloc[i].medium[0] == item)
+								{
+									for (int j = 0; j<100; j++)
+									{
+										
+									}
+								}
+							}
+						}
+					}
+					else if (itemsize == "L") //If item size is large.
+					{
+
+					}
+				}	
+			}
+		}		
+	}			
 }
 int main()
 {
