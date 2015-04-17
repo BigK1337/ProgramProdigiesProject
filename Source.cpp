@@ -88,8 +88,11 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 {
 	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize;
-	bool itemAlreadyInWarehouse;
+	bool itemAlreadyInWarehouse = false;
+	bool sizeFound = false;//A break below was messing things up, came up with a bool to track if we grabbed the size or not
 	bool warehousesChecked[3];
+	bool noRoom = false;
+	bool doneStoring = false;
 	warehousesChecked[0]= false;
 	warehousesChecked[1]= false;
 	warehousesChecked[2]= false;
@@ -107,31 +110,36 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 			for (int j = i; j>0; j--)
 			{
 				getline(Vendor, input);
+				doneStoring = false;
 				item = input.substr(0, 10); number = input.substr(11, 1);
 				if (input.size() == 14){ count = input.substr(13, 1); }
 				else if (input.size() == 15){ count = input.substr(13, 2); }
 				else if (input.size() == 16){ count = input.substr(13, 3); }
 				else if (input.size() == 17){ count = input.substr(13, 4); }
 				int n = (atoi(number.c_str()) - 1);
-				int numberFromForm = (atoi(number.c_str()));
+				int numberFromForm = (atoi(count.c_str()));
 				if (check(item, head, total) != true)
 				{
 					cout << "Item " << item << " is not in the catalogue, will not store item." << endl;
 				}
 				else
 				{
-					
-					int numberAlreadyInWarehouse = (atoi(num[n].medloc[i].medium[1].c_str()) - 1);
 					list *temp; temp = head;
-					for (int i = 0; i<total; i++)
-					{
+					int y = 0;
+					while(y<total && sizeFound == false)//replaced for loop so we could use the bool instead of the break
+					{					
 						if (temp->itemid == item)
 						{
 							itemsize = temp->itemsize; //Grabs Item Size from catalogue.
-							break;
+							sizeFound=true;//We found the size
 						}
+						if(sizeFound == false)//Until we find the size keep looking
+						{
 						temp = temp->next;
+						}
+						y++;
 					}
+					sizeFound = false;//reset to false
 					if (itemsize == "S")  //If item size is small.
 					{
 
@@ -139,13 +147,16 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 					else if (itemsize == "M") //If item size is medium.
 					{
 						//The below chunk checks to see if the item already exists in the warehouse
-						for (int i = 0; i<60; i++)//Look at all 60 medium spots in the warehouse
+						int z = 0;
+						while(z<60 && doneStoring == false)//Look at all 60 medium spots in the warehouse
 						{
-							if (num[n].medloc[i].medium[0] == item && num[n].medloc[i].medium[0]!="100")//If item is in warehouse and the slot isnt full
+							if (num[n].medloc[z].medium[0] == item && num[n].medloc[z].medium[0]!="100")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
 							}
-							if(itemAlreadyInWarehouse == true){
+							if(itemAlreadyInWarehouse == true)
+							{
+								int numberAlreadyInWarehouse = (atoi(num[n].medloc[z].medium[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
 							{
 								numberFromForm--;//Remove one from number to be added to warehouse
@@ -153,11 +164,14 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 							if(numberFromForm == 0)//If we added every item from the vendor form
 							{
-								//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
+								doneStoring = true;//We have stored every item from the vendor form
+								num[n].medloc[z].medium[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
+							cout<<"We just stored "<<num[n].medloc[z].medium[1]<<" of the item with ID: "<<num[n].medloc[z].medium[0]<<endl;
+							system("pause");
 							}
 							if(numberAlreadyInWarehouse == 100 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
-								i--;//Redo for loop for same item
+								z--;//Redo for loop for same item
 							}
 							else//item perfectly fills slot
 							{
@@ -167,38 +181,50 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							else//The below chunk runs if the item does not already exist in the warehouse.
 							{
 						//All below: Search for an empty slot. If none exist then check another warehouse.If all are full, tell analyst.					
-						for (int i = 0; i<60; i++)//Look at all 60 medium spots in the warehouse
+						for (int r = 0; r<60; r++)//Look at all 60 medium spots in the warehouse
 						{
-						if(num[n].medloc[i].medium[0] == "")
+						if(num[n].medloc[r].medium[0] == "")
 						{
-							num[n].medloc[i].medium[0] = item;//Put item ID in first empty slot
-							i--;//Restart loop for this item, there is now a place to add the items to.
+							num[n].medloc[r].medium[0] = item;//Put item ID in first empty slot
+							z--;//Restart loop for this item, there is now a place to add the items to.
+							break;
 						}
-						else
+						if(r==59)//checked whole warehouse, it is full
 						{
+							noRoom = true;
+						}
+						}
+
+						if(noRoom==true)
+						{
+							noRoom = false;
 							//Check another Warehouse
-							warehousesChecked[n] = true;
-							if(warehousesChecked[0]== false)
+							warehousesChecked[n] = true;//set the warehouse we just checked as checked
+							if(warehousesChecked[0]== false)//if we haven't checked warehouse 1, check it
 							{
 								n = 0;
 							}
-							else if(warehousesChecked[1]==false)
+							else if(warehousesChecked[1]==false)//if we haven't checked warehouse 2, check it
 							{
 								n = 1;
 							}
-							else if(warehousesChecked[2]==false)
+							else if(warehousesChecked[2]==false)//if we haven't checked warehouse 3, check it
 							{
 								n = 2;
 							}
 							else
 							{
 								//Tell analyst all warehouses are full
+								//Set all warehouses to unchecked
+								warehousesChecked[0]= false;
+								warehousesChecked[1]= false;
+								warehousesChecked[2]= false;
 							}
 							
 						}
-						}
+						
 							}
-
+							z++;
 						}		
 					}
 					else if (itemsize == "L") //If item size is large.
