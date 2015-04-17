@@ -89,6 +89,10 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 {
 	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize;
 	bool itemAlreadyInWarehouse;
+	bool warehousesChecked[3];
+	warehousesChecked[0]= false;
+	warehousesChecked[1]= false;
+	warehousesChecked[2]= false;
 	getline(Vendor, input);  //First line with File ID and date receieved.
 	fileid = input.substr(1, 4);
 	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 4) << "-" << today.substr(4, 2) << "-" << today.substr(6, 2) << endl << endl;
@@ -109,12 +113,14 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 				else if (input.size() == 16){ count = input.substr(13, 3); }
 				else if (input.size() == 17){ count = input.substr(13, 4); }
 				int n = (atoi(number.c_str()) - 1);
+				int numberFromForm = (atoi(number.c_str()));
 				if (check(item, head, total) != true)
 				{
 					cout << "Item " << item << " is not in the catalogue, will not store item." << endl;
 				}
 				else
 				{
+					
 					int numberAlreadyInWarehouse = (atoi(num[n].medloc[i].medium[1].c_str()) - 1);
 					list *temp; temp = head;
 					for (int i = 0; i<total; i++)
@@ -138,40 +144,60 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							if (num[n].medloc[i].medium[0] == item && num[n].medloc[i].medium[0]!="100")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
-								break;
 							}
 							if(itemAlreadyInWarehouse == true){
-							while(n>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
+							while(numberFromForm>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
 							{
-								n--;//Remove one from number to be added to warehouse
+								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
-							if(n == 0)//If we added every item from the vendor form
+							if(numberFromForm == 0)//If we added every item from the vendor form
 							{
 								//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
 							}
-							if(numberAlreadyInWarehouse == 100 && n>0)//If we filled the slot and there are still items remaining to be added
+							if(numberAlreadyInWarehouse == 100 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
 								i--;//Redo for loop for same item
 							}
-							else
+							else//item perfectly fills slot
 							{
-								//item perfectly fills slot
+								
 							}
 							}
-							else//item is not already in warehouse
+							else//The below chunk runs if the item does not already exist in the warehouse.
 							{
-								//Search for an empty slot. If none exist then check another warehouse.Ifa all are full, tell analyst
-
-						//The below chunk runs if the item does not already exist in the warehouse.
+						//All below: Search for an empty slot. If none exist then check another warehouse.If all are full, tell analyst.					
 						for (int i = 0; i<60; i++)//Look at all 60 medium spots in the warehouse
 						{
 						if(num[n].medloc[i].medium[0] == "")
 						{
-							num[n].medloc[i].medium[0] = item;	
-						}					
+							num[n].medloc[i].medium[0] = item;//Put item ID in first empty slot
+							i--;//Restart loop for this item, there is now a place to add the items to.
+						}
+						else
+						{
+							//Check another Warehouse
+							warehousesChecked[n] = true;
+							if(warehousesChecked[0]== false)
+							{
+								n = 0;
+							}
+							else if(warehousesChecked[1]==false)
+							{
+								n = 1;
+							}
+							else if(warehousesChecked[2]==false)
+							{
+								n = 2;
+							}
+							else
+							{
+								//Tell analyst all warehouses are full
+							}
+							
 						}
 						}
+							}
 
 						}		
 					}
