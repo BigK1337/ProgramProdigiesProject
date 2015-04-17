@@ -14,15 +14,15 @@ string itemtotal; //Total number of items in Catalogue string form.
 int total = 0; //Total number of items in catalogue, converted to int.
 struct sm
 {
-	string small[250]; //This will be the itemid - Alphanumeric
+	string small[2]; //Position 0 is ID.  Position 1 is Number of items with that ID in this slot.
 };
 struct med
 {
-	string medium[100]; //This will be the itemid - Alphanumeric
+	string medium[2]; //Position 0 is ID.  Position 1 is Number of items with that ID in this slot.
 };
 struct lar
 {
-	string large[10]; //This will be the itemid - Alphanumeric
+	string large[2]; //Position 0 is ID.  Position 1 is Number of items with that ID in this slot.
 };
 struct list //Information about each item.
 {
@@ -36,9 +36,9 @@ struct list //Information about each item.
 list *head;  //Catalogue of items
 struct warehouse  //Contains the slots for each size of item.
 {
-	sm sloc[20];
-	med medloc[60];
-	lar lloc[20];
+	sm sloc[20];//20 small slots
+	med medloc[60];//60 medium slots
+	lar lloc[20];//20 large slots
 };
 bool check(string item, list *p, int num)
 {
@@ -88,6 +88,7 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 {
 	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize;
+	bool itemAlreadyInWarehouse;
 	getline(Vendor, input);  //First line with File ID and date receieved.
 	fileid = input.substr(1, 4);
 	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 4) << "-" << today.substr(4, 2) << "-" << today.substr(6, 2) << endl << endl;
@@ -114,6 +115,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 				}
 				else
 				{
+					int numberAlreadyInWarehouse = (atoi(num[n].medloc[i].medium[1].c_str()) - 1);
 					list *temp; temp = head;
 					for (int i = 0; i<total; i++)
 					{
@@ -130,19 +132,48 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 					}
 					else if (itemsize == "M") //If item size is medium.
 					{
-						for (int i = 0; i<60; i++)
+						//The below chunk checks to see if the item already exists in the warehouse
+						for (int i = 0; i<60; i++)//Look at all 60 medium spots in the warehouse
 						{
-							if (num[n].medloc[i].medium[0] == "" || num[n].medloc[i].medium[0] == item)
+							if (num[n].medloc[i].medium[0] == item && num[n].medloc[i].medium[0]!="100")//If item is in warehouse and the slot isnt full
 							{
-								if (num[n].medloc[i].medium[0] == item)
-								{
-									for (int j = 0; j<100; j++)
-									{
-										
-									}
-								}
+								itemAlreadyInWarehouse = true;//Item is in warehouse
+								break;
 							}
+							if(itemAlreadyInWarehouse == true){
+							while(n>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
+							{
+								n--;//Remove one from number to be added to warehouse
+								numberAlreadyInWarehouse++;//Add one to number in warehouse
+							}
+							if(n == 0)//If we added every item from the vendor form
+							{
+								//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
+							}
+							if(numberAlreadyInWarehouse == 100 && n>0)//If we filled the slot and there are still items remaining to be added
+							{
+								i--;//Redo for loop for same item
+							}
+							else
+							{
+								//item perfectly fills slot
+							}
+							}
+							else//item is not already in warehouse
+							{
+								//Search for an empty slot. If none exist then check another warehouse.Ifa all are full, tell analyst
+
+						//The below chunk runs if the item does not already exist in the warehouse.
+						for (int i = 0; i<60; i++)//Look at all 60 medium spots in the warehouse
+						{
+						if(num[n].medloc[i].medium[0] == "")
+						{
+							num[n].medloc[i].medium[0] = item;	
+						}					
 						}
+						}
+
+						}		
 					}
 					else if (itemsize == "L") //If item size is large.
 					{
