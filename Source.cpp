@@ -610,7 +610,7 @@ int smallGivenToCustomer = 0;
 							}
 							}
 							if(m == 19){//This needs to move to next item in warehouse or check other warehouses or halt for analyst
-								cout<<"None of item "<<item<<" is in warehouse " << n;
+								cout<<"None of item "<<item<<" is in warehouse " << n +1<<endl;;
 								doneFillingOrder = true;
 								
 							}
@@ -668,7 +668,7 @@ int smallGivenToCustomer = 0;
 							}
 							}
 							if(l == 19){//This needs to move to next item in warehouse or check other warehouses or halt for analyst
-								cout<<"None of item "<<item<<" is in warehouse " << n;
+								cout<<"None of item "<<item<<" is in warehouse " << n +1<<endl;
 								doneFillingOrder = true;
 								
 							}
