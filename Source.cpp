@@ -142,11 +142,12 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 					}
 					sizeFound = false;//reset to false
 					bool itemAlreadyInWarehouse = false;//reset to false
+						int s = 0;
 					if (itemsize == "S")  //If item size is small.
 					{
-					{
+					
 						//The below chunk checks to see if the item already exists in the warehouse
-						int s = 0;
+					
 						
 						while(s<20 && doneStoring == false)//Look at all 20 small spots in the warehouse
 						{
@@ -185,10 +186,19 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						//All below: Search for an empty slot. If none exist then check another warehouse.If all are full, tell analyst.					
 						for (int r = 0; r<20; r++)//Look at all 60 small spots in the warehouse
 						{
-						if(num[n].sloc[r].small[0] == "")
+							if(num[n].sloc[0].small[0] == ""){
+								num[n].sloc[r].small[0] = item;//Put item ID in first empty slot
+								s--;//Restart loop for first item, there is now a place to add the items to.
+								break;
+							}
+							else if(r>1 && num[n].sloc[r-1].small[0] == item){
+								num[n].sloc[r].small[0] = item;//Put item ID in first empty slot
+								s--;//Restart loop for first item, there is now a place to add the items to.
+								break;
+							}
+						else if(num[n].sloc[r].small[0] == "")
 						{
 							num[n].sloc[r].small[0] = item;//Put item ID in first empty slot
-							s--;//Restart loop for this item, there is now a place to add the items to.
 							break;
 						}
 						if(r==19)//checked whole warehouse, it is full
@@ -224,9 +234,9 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							
 						}						
 							}
-							s++;
+							s++;;
 						}		
-					}		
+							
 					}					
 					else if (itemsize == "M") //If item size is medium.
 					{
@@ -272,7 +282,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						if(num[n].medloc[r].medium[0] == "")
 						{
 							num[n].medloc[r].medium[0] = item;//Put item ID in first empty slot
-							z--;//Restart loop for this item, there is now a place to add the items to.
+							if(z==0){z--;}//Restart loop for first item, there is now a place to add the items to.
 							break;
 						}
 						if(r==59)//checked whole warehouse, it is full
@@ -356,7 +366,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 						if(num[n].lloc[r].large[0] == "")
 						{
 							num[n].lloc[r].large[0] = item;//Put item ID in first empty slot
-							l--;//Restart loop for this item, there is now a place to add the items to.
+						if(l==0){l--;}//Restart loop for first item, there is now a place to add the items to.
 							break;
 						}
 						if(r==19)//checked whole warehouse, it is full
