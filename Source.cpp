@@ -431,6 +431,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 					cout<<"Small "<<i<<" ID: "<<num[n].sloc[i].small[0]<<" Count: "<<num[n].sloc[i].small[1]<<endl;
 
 				}
+				system("pause");
 				for(int i = 0; i<60; i++){
 					cout<<"Medium "<<i<<" ID: "<<num[n].medloc[i].medium[0]<<" Count: "<<num[n].medloc[i].medium[1]<<endl;
 
@@ -693,6 +694,7 @@ int smallGivenToCustomer = 0;
 					cout<<"Small "<<i<<" ID: "<<num[n].sloc[i].small[0]<<" Count: "<<num[n].sloc[i].small[1]<<endl;
 
 				}
+				system("pause");
 				for(int i = 0; i<60; i++){
 					cout<<"Medium "<<i<<" ID: "<<num[n].medloc[i].medium[0]<<" Count: "<<num[n].medloc[i].medium[1]<<endl;
 
