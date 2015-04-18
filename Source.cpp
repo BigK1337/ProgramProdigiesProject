@@ -716,6 +716,25 @@ int smallGivenToCustomer = 0;
 		}
 	}			
 }
+void saveProgress(warehouse num[3])
+{
+	ofstream save("progress.dat");
+	for (int n = 0; n < 3; n++){//Outputs the contents of all 3 warehouses, screen too small to get first 3 small slots.
+		save << "Warehouse " << n + 1 << endl;
+		for (int i = 0; i < 20; i++){
+			save << "Small " << i << " ID: " << num[n].sloc[i].small[0] << " Count: " << num[n].sloc[i].small[1] << endl;
+
+		} 
+		for (int i = 0; i < 60; i++){
+			save << "Medium " << i << " ID: " << num[n].medloc[i].medium[0] << " Count: " << num[n].medloc[i].medium[1] << endl;
+
+		}
+		for (int i = 0; i < 20; i++){
+			save << "Large " << i << " ID: " << num[n].lloc[i].large[0] << " Count: " << num[n].lloc[i].large[1] << endl;
+
+		}
+	}
+}
 int main()
 {
 	File.open("catalogue.txt"), Vendor.open("vendor.txt"), Customer.open("Customer.txt");  //Opening the files.
@@ -765,6 +784,7 @@ int main()
 	}
 	}
 	*/
+	saveProgress(num);
 	system("pause");
 	return 0;
 }
