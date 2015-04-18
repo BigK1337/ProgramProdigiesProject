@@ -147,9 +147,10 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 					{
 						//The below chunk checks to see if the item already exists in the warehouse
 						int s = 0;
-						bool itemAlreadyInWarehouse = false;//reset to false
+						
 						while(s<20 && doneStoring == false)//Look at all 20 small spots in the warehouse
 						{
+							bool itemAlreadyInWarehouse = false;//reset to false
 							if (num[n].sloc[s].small[0] == item && num[n].sloc[s].small[1]!="250")//If item is in warehouse and the slot isnt full
 							{
 								itemAlreadyInWarehouse = true;//Item is in warehouse
