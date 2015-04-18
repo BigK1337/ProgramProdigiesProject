@@ -98,7 +98,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 	warehousesChecked[2]= false;
 	getline(Vendor, input);  //First line with File ID and date receieved.
 	fileid = input.substr(1, 4);
-	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 4) << "-" << today.substr(4, 2) << "-" << today.substr(6, 2) << endl << endl;
+	today = input.substr(6, 8); cout << "File #" << fileid << "  Shipment recieved on: " << today.substr(0, 2) << "-" << today.substr(2, 2) << "-" << today.substr(4, 4) << endl << endl;
 	while (!Vendor.eof())  //Ticks once for every vendor.
 	{
 		getline(Vendor, input);  //Gets vendor info and amount of items.
