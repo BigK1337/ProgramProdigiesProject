@@ -157,10 +157,11 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 							if(itemAlreadyInWarehouse == true)
 							{
+								tempFromForm = to_string(numberFromForm);
 								int numberAlreadyInWarehouse = (atoi(num[n].sloc[s].small[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 250)//While there are some to be added from the form and still room in the slot
 							{
-								tempFromForm = numberFromForm;
+								
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
@@ -250,10 +251,11 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 							if(itemAlreadyInWarehouse == true)
 							{
+								tempFromForm = to_string(numberFromForm);
 								int numberAlreadyInWarehouse = (atoi(num[n].medloc[m].medium[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
 							{
-								tempFromForm = numberFromForm;
+								
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
@@ -343,10 +345,11 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 							if(itemAlreadyInWarehouse == true)
 							{
+								tempFromForm = to_string(numberFromForm);
 								int numberAlreadyInWarehouse = (atoi(num[n].lloc[l].large[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 10)//While there are some to be added from the form and still room in the slot
 							{
-								tempFromForm = numberFromForm;
+								
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
