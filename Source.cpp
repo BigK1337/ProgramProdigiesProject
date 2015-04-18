@@ -419,6 +419,25 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 		{
 			lineitems = input.substr(3, 1); numven = input.substr(1, 1);
 			cout << "Total number of vendors: " << numven << endl << "Total number of line items: " << lineitems << endl<< endl;
+
+			for(int n = 0; n<3; n++){
+		cout<<"Warehouse "<<n+1<<endl;
+				for(int i = 0; i<20; i++){
+					cout<<"Small "<<i<<" ID: "<<num[n].sloc[i].small[0]<<" Count: "<<num[n].sloc[i].small[1]<<endl;
+
+				}
+				for(int i = 0; i<60; i++){
+					cout<<"Medium "<<i<<" ID: "<<num[n].medloc[i].medium[0]<<" Count: "<<num[n].medloc[i].medium[1]<<endl;
+
+				}
+				for(int i = 0; i<20; i++){
+					cout<<"Large "<<i<<" ID: "<<num[n].lloc[i].large[0]<<" Count: "<<num[n].lloc[i].large[1]<<endl;
+
+				}
+				if(n == 2){
+					system("pause");
+				}
+			}
 		}
 	}
 }
@@ -609,7 +628,7 @@ int smallGivenToCustomer = 0;
 		else
 		{
 			lineitems = input.substr(3, 1); customers = input.substr(1, 1);
-			cout << "Total number of customers: " << customers << endl << "Total number of line items: " << lineitems << endl<< endl;
+			cout << "Total number of customers: " << customers << endl << "Total number of line items: " << lineitems << endl<< endl;			
 		}
 	}			
 }
