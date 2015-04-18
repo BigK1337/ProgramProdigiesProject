@@ -718,8 +718,8 @@ int smallGivenToCustomer = 0;
 }
 void saveProgress(warehouse num[3])
 {
-	ofstream save("progress.dat");
-	for (int n = 0; n < 3; n++){//Outputs the contents of all 3 warehouses, screen too small to get first 3 small slots.
+	ofstream save("progress.dat"); //Creates the save file for what is stored in warehouse
+	for (int n = 0; n < 3; n++){//Writes what is in the warehouse.
 		save << "Warehouse " << n + 1 << endl;
 		for (int i = 0; i < 20; i++){
 			save << "Small " << i << " ID: " << num[n].sloc[i].small[0] << " Count: " << num[n].sloc[i].small[1] << endl;
@@ -734,6 +734,7 @@ void saveProgress(warehouse num[3])
 
 		}
 	}
+
 }
 int main()
 {
