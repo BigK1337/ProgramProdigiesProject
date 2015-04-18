@@ -168,7 +168,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].small[1]
 							cout<<"Stored "<<num[n].sloc[s].small[1]<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" in location "<<s<<" of warehouse "<<n+1<<endl;
-							system("pause");
+						
 							}
 							if(numberAlreadyInWarehouse == 250 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
@@ -252,7 +252,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].medloc[z].medium[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].medloc[i].medium[1]
 							cout<<"Stored "<<num[n].medloc[z].medium[1]<<" of the Medium item with ID: "<<num[n].medloc[z].medium[0]<<" in location "<<z<<" of warehouse "<<n+1<<endl;
-							system("pause");
+						
 							}
 							if(numberAlreadyInWarehouse == 100 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
@@ -336,7 +336,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].lloc[i].large[1]
 							cout<<"Stored "<<num[n].lloc[l].large[1]<<" of the Large item with ID: "<<num[n].lloc[l].large[0]<<" in location "<<l<<" of warehouse "<<n+1<<endl;
-							system("pause");
+					
 							}
 							if(numberAlreadyInWarehouse == 10 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
@@ -401,37 +401,47 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 		else
 		{
 			lineitems = input.substr(3, 1); numven = input.substr(1, 1);
-			cout << "Total number of vendors: " << numven << endl << "Total number of line items: " << lineitems << endl;
+			cout << "Total number of vendors: " << numven << endl << "Total number of line items: " << lineitems << endl<< endl;
 		}
 	}
 }
 void customer(warehouse num[3])
 {
-	string input, type, last, first, business, straddr, city, state, post, country, orderdate, ordercount, custid, orderid, payment, discount, fileid, shipdate, item, number, count, customers, lineitems, itemsize;
+	string input, type, last, first, business, straddr, comma, city, state, post, country, orderdate, ordercount, custid, orderid, payment, discount, fileid, shipdate, item, number, count, customers, lineitems, itemsize;
 	//what is the business variable for???????
+	bool sizeFound = false;//reset to false
+	bool doneFillingOrder = false;
 	getline(Customer, input);
 	fileid = input.substr(1, 4);
-	shipdate = input.substr(6, 8); cout << "File #" << fileid << "  Shipping Date: " << shipdate.substr(0, 4) << "-" << shipdate.substr(4, 2) << "-" << shipdate.substr(6, 2) << endl << endl;
+	shipdate = input.substr(6, 8); cout <<endl<< "File #" << fileid << "  Shipping Date: " << shipdate.substr(0, 4) << "-" << shipdate.substr(4, 2) << "-" << shipdate.substr(6, 2) << endl << endl;
 	while (!Customer.eof()) 
 	{
 		getline(Customer, input);//Type,Last,First
 		if (input.size()>13)  //If not last line of file, continue.
 		{
 			//All of Customer's Info
-			type = input.substr(0, 1); last = input.substr(1, 30); first = input.substr(30, 30);straddr = input.substr(60, 30);city = input.substr(90, 20);
-			state = input.substr(110, 20);post = input.substr(130, 10);country = input.substr(140, 40);orderdate = input.substr(180, 8);ordercount = input.substr(188, 1);
-			custid = input.substr(189, 10);orderid = input.substr(199, 10);payment = input.substr(209, 10);discount = input.substr(219, 3);
+			type = input.substr(0, 1); last = input.substr(1, 30); first = input.substr(31, 30);straddr = input.substr(61, 30);comma = input.substr(91, 1);city = input.substr(92, 20);
+			state = input.substr(112, 20);post = input.substr(132, 10);country = input.substr(142, 40);orderdate = input.substr(182, 8);ordercount = input.substr(190, 1);
+			
+			
+	getline(Customer, input);
+			custid = input.substr(0, 10);
+			orderid = input.substr(10, 10);
+			payment = input.substr(20, 10);
+			discount = input.substr(30, 2);
 		
-		int i = atoi(ordercount.c_str());  //Gets number of items from vendor in int form.
+		int i = atoi(ordercount.c_str());  //Gets number of items from Customer in int form.
 			for (int j = i; j>0; j--)
 			{
-				getline(Vendor, input);
+				doneFillingOrder = false;
+				getline(Customer, input);
 				item = input.substr(0, 10); number = input.substr(11, 1);
 				if (input.size() == 14){ count = input.substr(13, 1); }
 				else if (input.size() == 15){ count = input.substr(13, 2); }
 				else if (input.size() == 16){ count = input.substr(13, 3); }
 				else if (input.size() == 17){ count = input.substr(13, 4); }
 				int n = (atoi(number.c_str()) - 1);
+				int numberStillNeeded = (atoi(count.c_str()));
 			
 		if (check(item, head, total) != true)
 				{
@@ -440,42 +450,150 @@ void customer(warehouse num[3])
 				else
 				{
 					list *temp; temp = head;
-					for (int i = 0; i<total; i++)
-					{
+					int y = 0;
+					while(y<total && sizeFound == false)//Find's item's size from catalogue
+					{					
 						if (temp->itemid == item)
 						{
 							itemsize = temp->itemsize; //Grabs Item Size from catalogue.
-							break;
+							sizeFound=true;//We found the size
 						}
+						if(sizeFound == false)//Until we find the size keep looking
+						{
 						temp = temp->next;
+						}
+						y++;
 					}
+					sizeFound = false;//reset to false
 					if (itemsize == "S")  //If item size is small.
 					{
+int smallGivenToCustomer = 0;
+//The below chunk checks to see if the item exists in the warehouse
+						int s = 0;
 
+						while(s<20 && doneFillingOrder == false)//Look at all 20 small spots in the warehouse
+						{
+							smallGivenToCustomer = 0;//reset to 0
+							bool itemStillInWarehouse = false;//reset to false
+							if (num[n].sloc[s].small[0] == item && num[n].sloc[s].small[1]!="0")//If item is in warehouse and the slot isnt empty
+							{
+								itemStillInWarehouse = true;//Item is in warehouse
+							}
+							if(itemStillInWarehouse == true)
+							{
+								int numberAlreadyInWarehouse = (atoi(num[n].sloc[s].small[1].c_str()));
+							while(numberStillNeeded>0 && numberAlreadyInWarehouse > 0)//While there are some still needed by the customer and there are some in the warehouse
+							{
+								numberStillNeeded--;//Remove one from number needed by the customer
+								numberAlreadyInWarehouse--;//Remove one from number in warehouse
+								smallGivenToCustomer++;//Add one to the number given to the customer
+							}
+							if(numberStillNeeded == 0)//If we gave the customer everything they ordered
+							{
+								doneFillingOrder = true;//We have given the customer all we have
+								num[n].sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[s].small[1]
+								
+							cout<<"Gave "<<smallGivenToCustomer<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" from location "<<s<<" of warehouse "<<n+1<<endl;
+		if(num[n].sloc[s].small[1] == "0")//Delete item in that slot if we empty slot
+								{
+									num[n].sloc[s].small[0] = "";
+									num[n].sloc[s].small[1] = "";
+								}
+							}
+							else if(numberAlreadyInWarehouse == 0 && numberStillNeeded>0)//If we empty the slot and there are still items needed by the customer
+							{
+								num[n].sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].small[1]
+									cout<<"Gave "<<smallGivenToCustomer<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" from location "<<s<<" of warehouse "<<n+1<<endl;
+									if(num[n].sloc[s].small[1] == "0")//Delete item in that slot if we empty slot
+								{
+									num[n].sloc[s].small[0] = "";
+									num[n].sloc[s].small[1] = "";
+								}
+							}
+							else//Items in warehouse = items needed by customer
+							{
+								
+							}
+							}
+							if(s == 19){//This needs to move to next item in warehouse or check other warehouses or halt for analyst
+								cout<<"None of item "<<item<<" is in warehouse " << n;
+								break;
+							}
+							s++;
+						}
 					}
 					else if (itemsize == "M") //If item size is medium.
 					{
 						for (int i = 0; i<60; i++)
 						{
-							if (num[n].medloc[i].medium[0] == "" || num[n].medloc[i].medium[0] == item)
-							{
-								if (num[n].medloc[i].medium[0] == item)
-								{
-									for (int j = 0; j<100; j++)
-									{
-										
-									}
-								}
-							}
+							
 						}
 					}
 					else if (itemsize == "L") //If item size is large.
 					{
+						int largeGivenToCustomer = 0;
+//The below chunk checks to see if the item exists in the warehouse
+						int l = 0;
 
+						while(l<20 && doneFillingOrder == false)//Look at all 20 large spots in the warehouse
+						{
+							largeGivenToCustomer = 0;//reset to 0
+							bool itemStillInWarehouse = false;//reset to false
+							if (num[n].lloc[l].large[0] == item && num[n].lloc[l].large[1]!="0")//If item is in warehouse and the slot isnt empty
+							{
+								itemStillInWarehouse = true;//Item is in warehouse
+							}
+							if(itemStillInWarehouse == true)
+							{
+								int numberAlreadyInWarehouse = (atoi(num[n].lloc[l].large[1].c_str()));
+							while(numberStillNeeded>0 && numberAlreadyInWarehouse > 0)//While there are some still needed by the customer and there are some in the warehouse
+							{
+								numberStillNeeded--;//Remove one from number needed by the customer
+								numberAlreadyInWarehouse--;//Remove one from number in warehouse
+								largeGivenToCustomer++;//Add one to the number given to the customer
+							}
+							if(numberStillNeeded == 0)//If we gave the customer everything they ordered
+							{
+								doneFillingOrder = true;//We have given the customer all we have
+								num[n].lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].lloc[i].large[1]
+								
+							cout<<"Gave "<<largeGivenToCustomer<<" of the Large item with ID: "<<num[n].lloc[l].large[0]<<" from location "<<l<<" of warehouse "<<n+1<<endl;
+						if(num[n].lloc[l].large[1] == "0")//Delete item in that slot if we empty slot
+								{
+									num[n].lloc[l].large[0] = "";
+									num[n].lloc[l].large[1] = "";
+								}
+							}
+							else if(numberAlreadyInWarehouse == 0 && numberStillNeeded>0)//If we empty the slot and there are still items needed by the customer
+							{
+								num[n].lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].lloc[i].large[1]
+									cout<<"Gave "<<largeGivenToCustomer<<" of the Large item with ID: "<<num[n].lloc[l].large[0]<<" from location "<<l<<" of warehouse "<<n+1<<endl;
+									if(num[n].lloc[l].large[1] == "0")//Delete item in that slot if we empty slot
+								{
+									num[n].lloc[l].large[0] = "";
+									num[n].lloc[l].large[1] = "";
+								}
+							}
+							else//Items in warehouse = items needed by customer
+							{
+								
+							}
+							}
+							if(l == 19){//This needs to move to next item in warehouse or check other warehouses or halt for analyst
+								cout<<"None of item "<<item<<" is in warehouse " << n;
+								break;
+							}
+							l++;
+						}	
 					}
 				}	
 			}
-		}		
+		}
+		else
+		{
+			lineitems = input.substr(3, 1); customers = input.substr(1, 1);
+			cout << "Total number of customers: " << customers << endl << "Total number of line items: " << lineitems << endl<< endl;
+		}
 	}			
 }
 int main()
@@ -486,6 +604,7 @@ int main()
 	head = new list;
 	setuplist(head);
 	vendor(num);
+	customer(num);
 	/*cout<<"What would you like to do?"<<endl<<"1. Intake initial stock."<<endl<<"2.Take vendor items in."<<endl;
 	cout<<"3.Receive customer order and ship."<<endl<<"4. Next Day."<<endl<<"5. Save and quit."<<endl;
 	cin>>input;
