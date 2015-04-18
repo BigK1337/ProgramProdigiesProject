@@ -87,7 +87,7 @@ void setuplist(list *p)  //Intakes the catalogue and stores it locally in the pr
 }
 void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 {
-	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize;
+	string input, today, fileid, item, number, count, shipped, comp, sentnum, numven, lineitems, itemsize, tempFromForm;
 	bool itemAlreadyInWarehouse = false;
 	bool sizeFound = false;//A break below was messing things up, came up with a bool to track if we grabbed the size or not
 	bool warehousesChecked[3];
@@ -160,6 +160,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								int numberAlreadyInWarehouse = (atoi(num[n].sloc[s].small[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 250)//While there are some to be added from the form and still room in the slot
 							{
+								tempFromForm = numberFromForm;
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
@@ -167,7 +168,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].small[1]
-							cout<<"Stored "<<num[n].sloc[s].small[1]<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" in location "<<s<<" of warehouse "<<n+1<<endl;					
+							cout<<"Stored "<<tempFromForm<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" in location "<<s<<" of warehouse "<<n+1<<endl;					
 							}
 							if(numberAlreadyInWarehouse == 250 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
@@ -252,6 +253,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								int numberAlreadyInWarehouse = (atoi(num[n].medloc[m].medium[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 100)//While there are some to be added from the form and still room in the slot
 							{
+								tempFromForm = numberFromForm;
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
@@ -259,7 +261,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].medloc[m].medium[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].medium[1]
-							cout<<"Stored "<<num[n].medloc[m].medium[1]<<" of the medium item with ID: "<<num[n].medloc[m].medium[0]<<" in location "<<m<<" of warehouse "<<n+1<<endl;					
+							cout<<"Stored "<<tempFromForm<<" of the medium item with ID: "<<num[n].medloc[m].medium[0]<<" in location "<<m<<" of warehouse "<<n+1<<endl;					
 							}
 							if(numberAlreadyInWarehouse == 100 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
@@ -344,6 +346,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 								int numberAlreadyInWarehouse = (atoi(num[n].lloc[l].large[1].c_str()));
 							while(numberFromForm>0 && numberAlreadyInWarehouse < 10)//While there are some to be added from the form and still room in the slot
 							{
+								tempFromForm = numberFromForm;
 								numberFromForm--;//Remove one from number to be added to warehouse
 								numberAlreadyInWarehouse++;//Add one to number in warehouse
 							}
@@ -351,7 +354,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								doneStoring = true;//We have stored every item from the vendor form
 								num[n].lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].large[1]
-							cout<<"Stored "<<num[n].lloc[l].large[1]<<" of the large item with ID: "<<num[n].lloc[l].large[0]<<" in location "<<l<<" of warehouse "<<n+1<<endl;					
+							cout<<"Stored "<<tempFromForm<<" of the large item with ID: "<<num[n].lloc[l].large[0]<<" in location "<<l<<" of warehouse "<<n+1<<endl;					
 							}
 							if(numberAlreadyInWarehouse == 10 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
