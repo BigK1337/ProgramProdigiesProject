@@ -173,6 +173,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								num[n].sloc[s].small[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].small[1]
 							cout<<"Stored "<<num[n].sloc[s].small[1]<<" of the small item with ID: "<<num[n].sloc[s].small[0]<<" in location "<<s<<" of warehouse "<<n+1<<endl;
+							if(s == 19){cout<<"There was not enough room in warehouse "<< n+1 << " to store the " <<numberFromForm<< " items with ID " <<item<<endl;}
 							}
 							else//item perfectly fills slot
 							{								
@@ -264,6 +265,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							{
 								num[n].medloc[m].medium[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].medium[1]
 							cout<<"Stored "<<num[n].medloc[m].medium[1]<<" of the medium item with ID: "<<num[n].medloc[m].medium[0]<<" in location "<<m<<" of warehouse "<<n+1<<endl;
+							if(m == 19){cout<<"There was not enough room in warehouse "<< n+1 << " to store the " <<numberFromForm<< " items with ID " <<item<<endl;}
 							}
 							else//item perfectly fills slot
 							{								
@@ -353,8 +355,10 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 							}
 							if(numberAlreadyInWarehouse == 10 && numberFromForm>0)//If we filled the slot and there are still items remaining to be added
 							{
+								
 								num[n].lloc[l].large[1]=to_string(numberAlreadyInWarehouse);//Convert numberAlreadyInWarehouse back into a string to be stored in num[n].sloc[i].large[1]
 							cout<<"Stored "<<num[n].lloc[l].large[1]<<" of the large item with ID: "<<num[n].lloc[l].large[0]<<" in location "<<l<<" of warehouse "<<n+1<<endl;
+							if(l == 19){cout<<"There was not enough room in warehouse "<< n+1 << " to store the " <<numberFromForm<< " items with ID " <<item<<endl;}
 							}
 							else//item perfectly fills slot
 							{								
@@ -420,7 +424,7 @@ void vendor(warehouse num[3])  //For when the Vendor file is ingested.
 		{
 			lineitems = input.substr(3, 1); numven = input.substr(1, 1);
 			cout << "Total number of vendors: " << numven << endl << "Total number of line items: " << lineitems << endl<< endl;
-
+			system("pause");
 			for(int n = 0; n<3; n++){//Outputs the contents of all 3 warehouses, screen too small to get first 3 small slots.
 		cout<<"Warehouse "<<n+1<<endl;
 				for(int i = 0; i<20; i++){
@@ -682,7 +686,7 @@ int smallGivenToCustomer = 0;
 		{
 			lineitems = input.substr(3, 1); customers = input.substr(1, 1);
 			cout << "Total number of customers: " << customers << endl << "Total number of line items: " << lineitems << endl<< endl;	
-
+			system("pause");
 				for(int n = 0; n<3; n++){//Outputs the contents of all 3 warehouses, screen too small to get first 3 small slots.
 		cout<<"Warehouse "<<n+1<<endl;
 				for(int i = 0; i<20; i++){
@@ -708,41 +712,51 @@ int main()
 {
 	File.open("catalogue.txt"), Vendor.open("vendor.txt"), Customer.open("Customer.txt");  //Opening the files.
 	warehouse num[3];  //Three warehouse locations
-	string input, temp;
+	char userInput; 
+	string temp;
 	head = new list;
 	setuplist(head);
 	vendor(num);
 	customer(num);
-	/*cout<<"What would you like to do?"<<endl<<"1. Intake initial stock."<<endl<<"2.Take vendor items in."<<endl;
-	cout<<"3.Receive customer order and ship."<<endl<<"4. Next Day."<<endl<<"5. Save and quit."<<endl;
-	cin>>input;
-	while(true)
+	/*
+	cout<<"Catalogue Created"<<endl;
+	
+	cout<<"What would you like to do?"<<endl<<"1. Intake initial stock."<<endl<<"2. Take vendor items in."<<endl;
+	cout<<"3. Receive customer order and ship."<<endl<<"4. Next Day."<<endl<<"5. Save and quit."<<"6. Abort without Saving. "<<endl;
+	cin>>userInput;
+	
+	while(userInput != '6'){
+	if(userInput == '1')
 	{
-	if(input=="1" || "1.")
+		cout<<"Hello";
+	}
+	else if(userInput == '2')
+	{
+		cout << "hyello";
+	vendor(num);
+	}
+	else if(userInput == '3')
+	{
+    customer(num);
+	}
+	else if(userInput == '4')
 	{
 
 	}
-	else if(input=="2" || "2.")
+	else if(userInput== '5')
 	{
 
 	}
-	else if(input=="3" || "3.")
+	else if(userInput== '6')
 	{
-
-	}
-	else if(input=="4" || "4.")
-	{
-
-	}
-	else if(input=="5" || "5.")
-	{
-
+		abort();
 	}
 	else
 	{
 	cout<<"Not a valid entry. Retype choice.";
 	}
-	}*/
-	system("pause"); //Coding in Xcode on mac, I don't need this.
+	}
+	*/
+	system("pause");
 	return 0;
 }
